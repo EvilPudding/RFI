@@ -163,7 +163,7 @@
 #define GEN_DEFINITION(num, name, ...) _GEN_DEFINITION(EXPAND_DEF##num, name, ##__VA_ARGS__)
 
 #define __DEF_SHR_FUNC(name, num, fd, fc, ...) \
-	void SHARED_##name(Client *client, char *buf) \
+	void SHARED_##name(void *client, char *buf) \
 	{ \
 		fd(__VA_ARGS__) \
 		name(client fc(__VA_ARGS__)); \
@@ -188,10 +188,6 @@
 #define  SERVER_COMMON \
 	void(*send_function)(char*);
 
-static inline void to_buffer(char *, int, ...);
-static inline void RFI_called(char *);
-static inline void called(char *, size_t, char*);
-
 typedef struct
 {
 	size_t id;
@@ -200,13 +196,17 @@ typedef struct
 typedef struct
 {
 	char name[100];
-	void(*func)(Client*, char*);
+	void(*func)(void*, char*);
 } FUNC;
 
 typedef struct
 {
 	SERVER_COMMON;
 } RFI_Server;
+
+static inline void to_buffer(char *, int, ...);
+static inline void RFI_called(void *, char *);
+static inline void called(void *, char *, size_t, char*);
 
 #define _HOST(num, ...) \
 	EXPAND(CALL(CONCAT(PREFIX_EACH,num), DEF_, ##__VA_ARGS__)) \
@@ -231,14 +231,14 @@ typedef struct
 
 #define SERVER(name, ...)	_SERVER(name, ARGNUM(__VA_ARGS__), ##__VA_ARGS__)
 #define HOST(...)			_HOST(ARGNUM(__VA_ARGS__), ##__VA_ARGS__); \
-static inline void called(char *function, size_t size, char *buffer) \
+static inline void called(void *data, char *function, size_t size, char *buffer) \
 { \
 	int i; \
 	for(i = 0; funcs[i].name[0] != '\0'; i++) \
 	{ \
 		if(!strcmp(function, funcs[i].name)) \
 		{ \
-			funcs[i].func(NULL, buffer); \
+			funcs[i].func(data, buffer); \
 			return; \
 		} \
 	} \
@@ -288,7 +288,7 @@ static inline void parse(char **buf, void *ptr, size_t size)
 	(*buf) += size;
 }
 
-static inline void RFI_called(char *buffer)
+static inline void RFI_called(void *data, char *buffer)
 {
 	char function[256];
 	size_t size = 0;
@@ -299,7 +299,7 @@ static inline void RFI_called(char *buffer)
 	memcpy(&size, buffer + ptr, sizeof(size_t));
 	ptr += sizeof(size_t);
 	/* print_hex(size, buffer + ptr); */
-	called(function, size, buffer + ptr);
+	called(data, function, size, buffer + ptr);
 }
 
 static inline void call(RFI_Server *serv, char *buffer)

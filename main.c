@@ -23,7 +23,7 @@ HOST(
 
 void send_to_server(char *buffer)
 {
-	RFI_called(buffer); /* Loopback */
+	RFI_called(NULL, buffer); /* Loopback */
 }
 
 SERVER(
