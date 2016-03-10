@@ -4,12 +4,12 @@
 
 /* SERVER SIDE */
 
-void printRange(Client *cli, int start, int end, int step)
+void printRange(void *data, int start, int end, int step)
 {
 	printf("%d -> %d : %d\n", start, end, step);
 }
 
-void touch(Client *cli)
+void touch(void *data)
 {
 	printf("Touched!\n");
 }

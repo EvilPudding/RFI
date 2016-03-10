@@ -190,11 +190,6 @@
 
 typedef struct
 {
-	size_t id;
-} Client;
-
-typedef struct
-{
 	char name[100];
 	void(*func)(void*, char*);
 } FUNC;
