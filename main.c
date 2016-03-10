@@ -2,23 +2,42 @@
 
 #include"rfi.h"
 
-SERVER(
-	Server,
-	REMOTE_FUNC(printRange, int, int, int),
-	REMOTE_FUNC(touch)
-);
+/* SERVER SIDE */
+
+void printRange(Client *cli, int start, int end, int step)
+{
+	printf("%d -> %d : %d\n", start, end, step);
+}
+
+void touch(Client *cli)
+{
+	printf("Touched!\n");
+}
 
 HOST(
 	SHARED_FUNC(printRange, int, int, int),
 	SHARED_FUNC(touch)
 );
 
+/* CLIENT SIDE */
+
+void send_to_server(char *buffer)
+{
+	RFI_called(buffer); /* Loopback */
+}
+
+SERVER(
+	Remote,
+	REMOTE_FUNC(printRange, int, int, int),
+	REMOTE_FUNC(touch)
+);
+
 int main(int argc, char **argv)
 {
-	Server *server = Server_new("127.0.0.1", 5000);
-	server->printRange(server, 59, 30, 32);
-	server->touch(server);
-	Server_free(server);
+	Remote *remote = Remote_new(send_to_server);
+	remote->printRange(remote, 59, 30, 32);
+	remote->touch(remote);
+	Remote_free(remote);
 
 	return 0;
 }

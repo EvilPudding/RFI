@@ -1,6 +1,7 @@
 #ifndef RFI_H
 #define RFI_H
 
+#include<stdlib.h>
 #include<string.h>
 #include<stdarg.h>
 #include<stdlib.h>
@@ -185,9 +186,11 @@
 #define DEF_SHARED_FUNC(name, ...) DEF_SHR_FUNC(name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
 
 #define  SERVER_COMMON \
-	size_t port; \
-	char ip[16];
+	void(*send_function)(char*);
 
+static inline void to_buffer(char *, int, ...);
+static inline void RFI_called(char *);
+static inline void called(char *, size_t, char*);
 
 typedef struct
 {
@@ -216,21 +219,19 @@ typedef struct
 	typedef struct { SERVER_COMMON; \
 		EXPAND(CALL(CONCAT(PREFIX_EACH,num), PTR_, ##__VA_ARGS__)) \
 	} name; \
-	name *CONCAT(name,_new)(char *ip, size_t port) { \
+	name *CONCAT(name,_new)(void(*send_function)(char*)) { \
 		name *this = (name*)malloc(sizeof(name)); \
-		this->port = port; \
-		strncpy(this->ip, ip, 16); \
+		RFI_Server_init((RFI_Server*)this, send_function); \
 		GEN_ASSIGNMENT(num, name, ##__VA_ARGS__) \
 		return this; \
 	} \
-	name *CONCAT(name,_free)(name *this) { \
+	void CONCAT(name,_free)(name *this) { \
 		free(this); \
 	}
 
-void called(char *, size_t, char*);
 #define SERVER(name, ...)	_SERVER(name, ARGNUM(__VA_ARGS__), ##__VA_ARGS__)
 #define HOST(...)			_HOST(ARGNUM(__VA_ARGS__), ##__VA_ARGS__); \
-void called(char *function, size_t size, char *buffer) \
+static inline void called(char *function, size_t size, char *buffer) \
 { \
 	int i; \
 	for(i = 0; funcs[i].name[0] != '\0'; i++) \
@@ -241,62 +242,9 @@ void called(char *function, size_t size, char *buffer) \
 			return; \
 		} \
 	} \
-	printf("function '%s' not found!\n", function); \
 }
 
-
-/* static inline void reg(char *name, void *pointer) */
-/* { */
-/* 	/1* printf("Registred %s\n", name); *1/ */
-/* } */
-
-void print_hex(size_t l, const char *s)
-{
-	while(l)
-	{
-		printf("%02x ", (unsigned int) *s++);
-		l --;
-	}
-	printf("\n");
-}
-
-void touch()
-{
-	printf("touched\n");
-}
-
-void printRange(Client *cli, int start, int end, int step)
-{
-	printf("start:%d end:%d step:%d\n", start, end, step);
-}
-
-void server_called(char *buffer)
-{
-	char function[256];
-	size_t size = 0;
-	size_t ptr = (size_t)(strchr(buffer, '#') - buffer);
-	strncpy(function, buffer, ptr);
-	function[ptr] = '\0';
-	ptr++;
-	memcpy(&size, buffer + ptr, sizeof(size_t));
-	ptr += sizeof(size_t);
-	/* print_hex(size, buffer + ptr); */
-
-	called(function, size, buffer + ptr);
-
-}
-
-static inline void call(RFI_Server *serv, char *buffer)
-{
-	/* SEND TO SERVER */
-	server_called(buffer);
-}
-
-static inline void parse(char **buf, void *ptr, size_t size)
-{
-	memcpy(ptr, (*buf), size);
-	(*buf) += size;
-}
+/* DOT_C */
 
 static inline void to_buffer(char *buffer, int n, ...)
 {
@@ -328,5 +276,38 @@ static inline void to_buffer(char *buffer, int n, ...)
 
 	va_end(va);
 }
+
+static inline void RFI_Server_init(RFI_Server *this, void (*send_function)(char*))
+{
+	this->send_function = send_function;
+}
+
+static inline void parse(char **buf, void *ptr, size_t size)
+{
+	memcpy(ptr, (*buf), size);
+	(*buf) += size;
+}
+
+static inline void RFI_called(char *buffer)
+{
+	char function[256];
+	size_t size = 0;
+	size_t ptr = (size_t)(strchr(buffer, '#') - buffer);
+	memcpy(function, buffer, ptr);
+	function[ptr] = '\0';
+	ptr++;
+	memcpy(&size, buffer + ptr, sizeof(size_t));
+	ptr += sizeof(size_t);
+	/* print_hex(size, buffer + ptr); */
+	called(function, size, buffer + ptr);
+}
+
+static inline void call(RFI_Server *serv, char *buffer)
+{
+	serv->send_function(buffer);
+}
+
+/* !DOT_C */
+
 
 #endif /* !RFI_H */
