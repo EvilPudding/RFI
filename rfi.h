@@ -80,15 +80,19 @@
 #define EXPAND_DEF_ARG7(type, ...) type g, EXPAND_DEF_ARG6(__VA_ARGS__)
 #define EXPAND_DEF_ARG8(type, ...) type h, EXPAND_DEF_ARG7(__VA_ARGS__)
 
+#define istype(a,b) __builtin_types_compatible_p(a,b)
+#define is(c,a,b) __builtin_choose_expr(c,a,b)
+#define SSIZE(type) is(istype(type,char*), 0, sizeof(type))
+
 #define EXPAND_CALL_ARG0()
-#define EXPAND_CALL_ARG1(type) , &a, sizeof(type)
-#define EXPAND_CALL_ARG2(type, ...) , &b, sizeof(type) EXPAND_CALL_ARG1(__VA_ARGS__)
-#define EXPAND_CALL_ARG3(type, ...) , &c, sizeof(type) EXPAND_CALL_ARG2(__VA_ARGS__)
-#define EXPAND_CALL_ARG4(type, ...) , &d, sizeof(type) EXPAND_CALL_ARG3(__VA_ARGS__)
-#define EXPAND_CALL_ARG5(type, ...) , &e, sizeof(type) EXPAND_CALL_ARG4(__VA_ARGS__)
-#define EXPAND_CALL_ARG6(type, ...) , &f, sizeof(type) EXPAND_CALL_ARG5(__VA_ARGS__)
-#define EXPAND_CALL_ARG7(type, ...) , &g, sizeof(type) EXPAND_CALL_ARG6(__VA_ARGS__)
-#define EXPAND_CALL_ARG8(type, ...) , &h, sizeof(type) EXPAND_CALL_ARG7(__VA_ARGS__)
+#define EXPAND_CALL_ARG1(type) , &a, SSIZE(type)
+#define EXPAND_CALL_ARG2(type, ...) , &b, SSIZE(type) EXPAND_CALL_ARG1(__VA_ARGS__)
+#define EXPAND_CALL_ARG3(type, ...) , &c, SSIZE(type) EXPAND_CALL_ARG2(__VA_ARGS__)
+#define EXPAND_CALL_ARG4(type, ...) , &d, SSIZE(type) EXPAND_CALL_ARG3(__VA_ARGS__)
+#define EXPAND_CALL_ARG5(type, ...) , &e, SSIZE(type) EXPAND_CALL_ARG4(__VA_ARGS__)
+#define EXPAND_CALL_ARG6(type, ...) , &f, SSIZE(type) EXPAND_CALL_ARG5(__VA_ARGS__)
+#define EXPAND_CALL_ARG7(type, ...) , &g, SSIZE(type) EXPAND_CALL_ARG6(__VA_ARGS__)
+#define EXPAND_CALL_ARG8(type, ...) , &h, SSIZE(type) EXPAND_CALL_ARG7(__VA_ARGS__)
 
 #define EXPAND_CALL_ARG_HOST0()
 #define EXPAND_CALL_ARG_HOST1(type) , a
@@ -101,14 +105,14 @@
 #define EXPAND_CALL_ARG_HOST8(type, ...) , h EXPAND_CALL_ARG_HOST7(__VA_ARGS__)
 
 #define EXPAND_DEF_ARG_HOST0()
-#define EXPAND_DEF_ARG_HOST1(type) type a;parse(&buf, &a, sizeof(type));
-#define EXPAND_DEF_ARG_HOST2(type, ...) type b;parse(&buf, &b, sizeof(type)); EXPAND_DEF_ARG_HOST1(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST3(type, ...) type c;parse(&buf, &c, sizeof(type)); EXPAND_DEF_ARG_HOST2(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST4(type, ...) type d;parse(&buf, &d, sizeof(type)); EXPAND_DEF_ARG_HOST3(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST5(type, ...) type e;parse(&buf, &e, sizeof(type)); EXPAND_DEF_ARG_HOST4(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST6(type, ...) type f;parse(&buf, &f, sizeof(type)); EXPAND_DEF_ARG_HOST5(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST7(type, ...) type g;parse(&buf, &g, sizeof(type)); EXPAND_DEF_ARG_HOST6(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST8(type, ...) type h;parse(&buf, &h, sizeof(type)); EXPAND_DEF_ARG_HOST7(__VA_ARGS__)
+#define EXPAND_DEF_ARG_HOST1(type) type a;parse(&buf, &a, SSIZE(type), &fr);
+#define EXPAND_DEF_ARG_HOST2(type, ...) type b;parse(&buf, &b, SSIZE(type), &fr); EXPAND_DEF_ARG_HOST1(__VA_ARGS__)
+#define EXPAND_DEF_ARG_HOST3(type, ...) type c;parse(&buf, &c, SSIZE(type), &fr); EXPAND_DEF_ARG_HOST2(__VA_ARGS__)
+#define EXPAND_DEF_ARG_HOST4(type, ...) type d;parse(&buf, &d, SSIZE(type), &fr); EXPAND_DEF_ARG_HOST3(__VA_ARGS__)
+#define EXPAND_DEF_ARG_HOST5(type, ...) type e;parse(&buf, &e, SSIZE(type), &fr); EXPAND_DEF_ARG_HOST4(__VA_ARGS__)
+#define EXPAND_DEF_ARG_HOST6(type, ...) type f;parse(&buf, &f, SSIZE(type), &fr); EXPAND_DEF_ARG_HOST5(__VA_ARGS__)
+#define EXPAND_DEF_ARG_HOST7(type, ...) type g;parse(&buf, &g, SSIZE(type), &fr); EXPAND_DEF_ARG_HOST6(__VA_ARGS__)
+#define EXPAND_DEF_ARG_HOST8(type, ...) type h;parse(&buf, &h, SSIZE(type), &fr); EXPAND_DEF_ARG_HOST7(__VA_ARGS__)
 
 #define DEFIT(var) DEF_##var
 #define EXPAND_DEF0(name, ...)
@@ -165,8 +169,11 @@
 #define __DEF_SHR_FUNC(name, num, fd, fc, ...) \
 	void SHARED_##name(void *client, char *buf) \
 	{ \
+		void *to_free[100]; /* Pointers to be freed */ \
+		void **fr = to_free; \
 		fd(__VA_ARGS__) \
 		name(client fc(__VA_ARGS__)); \
+		while(fr != to_free) fr--, free(*fr); \
 	}
 
 #define _DEF_SHR_FUNC(name, num, ...) \
@@ -259,8 +266,18 @@ static inline void to_buffer(char *buffer, int n, ...)
 	{
 		void *data = va_arg(va, void*);
 		size_t size = va_arg(va, size_t);
+
+		if(size == 0) /* IS STRING */
+		{
+			char *str = (*(char**)data)?:"";
+			size = strlen(str) + 1;
+			memcpy(buffer + len, str, size);
+		}
+		else
+		{
+			memcpy(buffer + len, data, size);
+		}
 		total_size += size;
-		memcpy(buffer + len, data, size);
 		len += size;
 	}
 	buffer[len] = '\0';
@@ -277,9 +294,20 @@ static inline void RFI_Server_init(RFI_Server *this, void (*send_function)(char*
 	this->send_function = send_function;
 }
 
-static inline void parse(char **buf, void *ptr, size_t size)
+static inline void parse(char **buf, void *ptr, size_t size, void ***f)
 {
-	memcpy(ptr, (*buf), size);
+	if(size == 0) /* IS STRING */
+	{
+		char **str = (char**)ptr;
+		(*str) = strdup(*(char**)buf);
+
+		*(*f) = (*str);
+		(*f)++;
+	}
+	else
+	{
+		memcpy(ptr, (*buf), size);
+	}
 	(*buf) += size;
 }
 
