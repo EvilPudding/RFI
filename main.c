@@ -27,12 +27,12 @@ HOST(
 
 /* CLIENT SIDE */
 
-void send_to_server(char *buffer)
+void send_to_server(void *data, char *buffer)
 {
 	RFI_called(NULL, buffer); /* Loopback */
 }
 
-SERVER(
+REMOTE(
 	Remote,
 	REMOTE_FUNC(printMessage, char*),
 	REMOTE_FUNC(printRange, int, int, int),
@@ -41,10 +41,10 @@ SERVER(
 
 int main(int argc, char **argv)
 {
-	Remote *remote = Remote_new(send_to_server);
+	Remote *remote = Remote_new(send_to_server, NULL);
+	remote->printMessage(remote, "Magic.");
 	remote->touch(remote);
 	remote->printRange(remote, 59, 30, 32);
-	remote->printMessage(remote, "Magic.");
 	Remote_free(remote);
 
 	return 0;
