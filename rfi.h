@@ -4,7 +4,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include<stdarg.h>
-#include<stdlib.h>
 
 #define CALL_REMOTE(func) REMOTE_##func
 
