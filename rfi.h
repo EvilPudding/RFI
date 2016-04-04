@@ -295,6 +295,7 @@ static inline void parse(char **buf, void *ptr, size_t size)
 		char **str = (char**)ptr;
 		/* (*str) = strdup(*buf); */
 		(*str) = *buf;
+		size = strlen(*buf) + 1;
 
 		/* *(*f) = (*str); */
 		/* (*f)++; */
