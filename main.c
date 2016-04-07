@@ -27,9 +27,9 @@ HOST(
 
 /* CLIENT SIDE */
 
-void send_to_server(void *data, char *buffer)
+void send_to_server(void *data, char *buffer, size_t size)
 {
-	RFI_called(NULL, buffer); /* Loopback */
+	RFI_called(NULL, buffer, size); /* Loopback */
 }
 
 REMOTE(
@@ -42,9 +42,9 @@ REMOTE(
 int main(int argc, char **argv)
 {
 	Remote *remote = Remote_new(send_to_server, NULL);
-	remote->printMessage(remote, "Hello ", "World!");
-	remote->printRange(remote, 59, 30, 32);
 	remote->touch(remote);
+	remote->printRange(remote, 59, 30, 32);
+	remote->printMessage(remote, "Hello ", "World!");
 	Remote_free(remote);
 
 	return 0;

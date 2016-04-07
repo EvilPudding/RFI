@@ -136,10 +136,14 @@
 #define __DEF_REM_FUNC(name, num, fd, fc, ...) \
 	void name(void *data, fd(__VA_ARGS__)) \
 	{ \
+		const char f_name[] = #name "#"; \
 		RFI_Server *serv = data; \
-		char buffer[256] = #name; \
+		size_t total_size = get_size(num * 2 fc(__VA_ARGS__)) + sizeof(f_name) - 1; \
+		char *buffer_head = alloca(total_size); \
+		char *buffer = buffer_head; \
+		memcpy(buffer, f_name, sizeof(f_name)); buffer += sizeof(f_name)-1; \
 		to_buffer(buffer, num * 2 fc(__VA_ARGS__) ); \
-		serv->send_function(serv->send_data, buffer); \
+		serv->send_function(serv->send_data, buffer_head, total_size); \
 	}; \
 	this->name = name
 #define _DEF_REM_FUNC(name, num, ...) \
@@ -176,7 +180,7 @@
 #define DEF_SHARED_FUNC(name, ...) DEF_SHR_FUNC(name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
 
 #define  REMOTE_COMMON \
-	void(*send_function)(void*, char*); \
+	void(*send_function)(void*, char*,size_t); \
 	void *send_data
 
 typedef struct
@@ -190,9 +194,10 @@ typedef struct
 	REMOTE_COMMON;
 } RFI_Server;
 
+size_t get_size(int, ...);
 void to_buffer(char *, int, ...);
-void RFI_called(void *, char *);
-static inline void called(void *, char *, size_t, char*);
+void RFI_called(void *, char *, size_t);
+static inline void called(void *, char *, char*);
 
 #define _HOST(num, ...) \
 	EXPAND(CALL(CONCAT(PREFIX_EACH,num), DEF_, ##__VA_ARGS__)) \
@@ -204,20 +209,22 @@ static inline void called(void *, char *, size_t, char*);
 	typedef struct { REMOTE_COMMON; \
 		EXPAND(CALL(CONCAT(PREFIX_EACH,num), PTR_, ##__VA_ARGS__)) \
 	} name; \
-	name *CONCAT(name,_new)(void(*send_function)(void*,char*), void *send_data) { \
+	name *CONCAT(name,_new)(void(*send_function)(void*,char*,size_t), void *send_data) \
+	{ \
 		name *this = (name*)malloc(sizeof(name)); \
 		this->send_function = send_function; \
 		this->send_data = send_data; \
 		GEN_DEFINITION(num, name, ##__VA_ARGS__) \
 		return this; \
 	} \
-	void CONCAT(name,_free)(name *this) { \
+	void CONCAT(name,_free)(name *this) \
+	{ \
 		free(this); \
 	}
 
 #define REMOTE(name, ...)	_REMOTE(name, ARGNUM(__VA_ARGS__), ##__VA_ARGS__)
 #define HOST(...)			_HOST(ARGNUM(__VA_ARGS__), ##__VA_ARGS__); \
-static inline void called(void *data, char *function, size_t size, char *buffer) \
+static inline void called(void *data, char *function, char *buffer) \
 { \
 	int i; \
 	for(i = 0; funcs[i].name[0] != '\0'; i++) \
@@ -231,44 +238,54 @@ static inline void called(void *data, char *function, size_t size, char *buffer)
 }
 
 /* DOT_C */
-
-void to_buffer(char *buffer, int n, ...)
+size_t write_to_buffer(char *buffer, void *ptr, size_t size)
 {
-	size_t len = strlen(buffer);
+	if(size == 0) /* IS STRING */
+	{
+		char *str = (*(char**)ptr)?:"";
+		size = strlen(str) + 1;
+		memcpy(buffer, str, size);
+	}
+	else
+	{
+		memcpy(buffer, ptr, size);
+	}
+	return size;
+}
 
-	strcpy(buffer + len, "#");
-	len += 1;
-
-	char *size_ptr = buffer + len;
-	len += sizeof(size_t);
-
+size_t get_size(int n, ...)
+{
 	va_list va;
 	va_start(va, n);
-	int i;
 	size_t total_size = 0;
-	for(i = 0; i < n; i+=2)
+	while(n)
 	{
 		void *data = va_arg(va, void*);
 		size_t size = va_arg(va, size_t);
-
-		if(size == 0) /* IS STRING */
+		if(!size)
 		{
-			char *str = (*(char**)data)?:"";
-			size = strlen(str) + 1;
-			memcpy(buffer + len, str, size);
-		}
-		else
-		{
-			memcpy(buffer + len, data, size);
+			size = strlen(*(char**)data) + 1;
 		}
 		total_size += size;
+		n -= 2;
+	}
+	return total_size;
+}
+
+void to_buffer(char *buffer, int n, ...)
+{
+	va_list va;
+	va_start(va, n);
+	size_t len = 0;
+	while(n)
+	{
+		void *data = va_arg(va, void*);
+		size_t size = write_to_buffer(buffer + len, data, va_arg(va, size_t));
+
 		len += size;
+		n -= 2;
 	}
 	buffer[len] = '\0';
-
-	memcpy(size_ptr, &total_size, sizeof(size_t));
-
-	/* print_hex(total_size, size_ptr + sizeof(size_t)); */
 
 	va_end(va);
 }
@@ -277,13 +294,8 @@ static inline void parse(char **buf, void *ptr, size_t size)
 {
 	if(size == 0) /* IS STRING */
 	{
-		char **str = (char**)ptr;
-		/* (*str) = strdup(*buf); */
-		(*str) = *buf;
+		*(char**)ptr = *buf;
 		size = strlen(*buf) + 1;
-
-		/* *(*f) = (*str); */
-		/* (*f)++; */
 	}
 	else
 	{
@@ -292,18 +304,11 @@ static inline void parse(char **buf, void *ptr, size_t size)
 	(*buf) += size;
 }
 
-void RFI_called(void *data, char *buffer)
+void RFI_called(void *data, char *buffer, size_t size)
 {
-	char function[256];
-	size_t size = 0;
-	size_t ptr = (size_t)(strchr(buffer, '#') - buffer);
-	memcpy(function, buffer, ptr);
-	function[ptr] = '\0';
-	ptr++;
-	memcpy(&size, buffer + ptr, sizeof(size_t));
-	ptr += sizeof(size_t);
-	/* print_hex(size, buffer + ptr); */
-	called(data, function, size, buffer + ptr);
+	char *args = strchr(buffer, '#');
+	args[0] = '\0';
+	called(data, buffer, args + 1);
 }
 
 /* !DOT_C */
