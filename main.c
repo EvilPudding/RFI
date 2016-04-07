@@ -43,8 +43,8 @@ int main(int argc, char **argv)
 {
 	Remote *remote = Remote_new(send_to_server, NULL);
 	remote->printMessage(remote, "Hello ", "World!");
-	remote->touch(remote);
 	remote->printRange(remote, 59, 30, 32);
+	remote->touch(remote);
 	Remote_free(remote);
 
 	return 0;

@@ -113,27 +113,15 @@
 #define EXPAND_DEF_ARG_HOST7(type, ...) type g;parse(&buf, &g, SSIZE(type)); EXPAND_DEF_ARG_HOST6(__VA_ARGS__)
 #define EXPAND_DEF_ARG_HOST8(type, ...) type h;parse(&buf, &h, SSIZE(type)); EXPAND_DEF_ARG_HOST7(__VA_ARGS__)
 
-#define DEFIT(var) DEF_##var
-#define EXPAND_DEF0(name, ...)
-#define EXPAND_DEF1(name, var)		void CONCAT2(name##_,DEFIT(var));
-#define EXPAND_DEF2(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF1(name, __VA_ARGS__)
-#define EXPAND_DEF3(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF2(name, __VA_ARGS__)
-#define EXPAND_DEF4(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF3(name, __VA_ARGS__)
-#define EXPAND_DEF5(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF4(name, __VA_ARGS__)
-#define EXPAND_DEF6(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF5(name, __VA_ARGS__)
-#define EXPAND_DEF7(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF6(name, __VA_ARGS__)
-#define EXPAND_DEF8(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF7(name, __VA_ARGS__)
-
-#define ASSIT(var) ASS_##var
-#define EXPAND_ASS0()
-#define EXPAND_ASS1(name, var) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var));
-#define EXPAND_ASS2(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS1(name, __VA_ARGS__)
-#define EXPAND_ASS3(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS2(name, __VA_ARGS__)
-#define EXPAND_ASS4(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS3(name, __VA_ARGS__)
-#define EXPAND_ASS5(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS4(name, __VA_ARGS__)
-#define EXPAND_ASS6(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS5(name, __VA_ARGS__)
-#define EXPAND_ASS7(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS6(name, __VA_ARGS__)
-#define EXPAND_ASS8(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS7(name, __VA_ARGS__)
+#define EXPAND_DEF0(...)
+#define EXPAND_DEF1(var)		DEF_##var;
+#define EXPAND_DEF2(var, ...) DEF_##var; EXPAND_DEF1(__VA_ARGS__)
+#define EXPAND_DEF3(var, ...) DEF_##var; EXPAND_DEF2(__VA_ARGS__)
+#define EXPAND_DEF4(var, ...) DEF_##var; EXPAND_DEF3(__VA_ARGS__)
+#define EXPAND_DEF5(var, ...) DEF_##var; EXPAND_DEF4(__VA_ARGS__)
+#define EXPAND_DEF6(var, ...) DEF_##var; EXPAND_DEF5(__VA_ARGS__)
+#define EXPAND_DEF7(var, ...) DEF_##var; EXPAND_DEF6(__VA_ARGS__)
+#define EXPAND_DEF8(var, ...) DEF_##var; EXPAND_DEF7(__VA_ARGS__)
 
 #define CALL(f, ...) f(__VA_ARGS__)
 #define CALL2(...) CALL(__VA_ARGS__)
@@ -146,25 +134,23 @@
 #define DEF_REM_PTRS(name, num, ...) _DEF_REM_PTRS(name, num, ##__VA_ARGS__)
 
 #define __DEF_REM_FUNC(name, num, fd, fc, ...) \
-	name(void *data, fd(__VA_ARGS__)) \
+	void name(void *data, fd(__VA_ARGS__)) \
 	{ \
 		RFI_Server *serv = data; \
 		char buffer[256] = #name; \
 		to_buffer(buffer, num * 2 fc(__VA_ARGS__) ); \
 		serv->send_function(serv->send_data, buffer); \
-	}
+	}; \
+	this->name = name
 #define _DEF_REM_FUNC(name, num, ...) \
 	__DEF_REM_FUNC(name, num, EXPAND_DEF_ARG##num, EXPAND_CALL_ARG##num, ##__VA_ARGS__)
 #define DEF_REM_FUNC(name, num, ...) _DEF_REM_FUNC(name, num, ##__VA_ARGS__) \
 
 #define DEF_REMOTE_FUNC(name, ...) DEF_REM_FUNC(name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
 #define PTR_REMOTE_FUNC(name, ...) DEF_REM_PTRS(name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
-#define ASS_REMOTE_FUNC(name, ...) name
 
-#define _GEN_ASSIGNMENT(f, name, ...) f(name, ##__VA_ARGS__)
 #define _GEN_DEFINITION(f, name, ...) f(name, ##__VA_ARGS__)
-#define GEN_ASSIGNMENT(num, name, ...) _GEN_ASSIGNMENT(EXPAND_ASS##num, name, ##__VA_ARGS__)
-#define GEN_DEFINITION(num, name, ...) _GEN_DEFINITION(EXPAND_DEF##num, name, ##__VA_ARGS__)
+#define GEN_DEFINITION(num, name, ...) _GEN_DEFINITION(EXPAND_DEF##num, ##__VA_ARGS__)
 
 #define __DEF_SHR_FUNC(name, num, fd, fc, ...) \
 	void SHARED_##name(void *client, char *buf) \
@@ -204,8 +190,8 @@ typedef struct
 	REMOTE_COMMON;
 } RFI_Server;
 
-static inline void to_buffer(char *, int, ...);
-static inline void RFI_called(void *, char *);
+void to_buffer(char *, int, ...);
+void RFI_called(void *, char *);
 static inline void called(void *, char *, size_t, char*);
 
 #define _HOST(num, ...) \
@@ -215,7 +201,6 @@ static inline void called(void *, char *, size_t, char*);
 	}
 
 #define _REMOTE(name, num, ...) \
-	GEN_DEFINITION(num, name, ##__VA_ARGS__) \
 	typedef struct { REMOTE_COMMON; \
 		EXPAND(CALL(CONCAT(PREFIX_EACH,num), PTR_, ##__VA_ARGS__)) \
 	} name; \
@@ -223,7 +208,7 @@ static inline void called(void *, char *, size_t, char*);
 		name *this = (name*)malloc(sizeof(name)); \
 		this->send_function = send_function; \
 		this->send_data = send_data; \
-		GEN_ASSIGNMENT(num, name, ##__VA_ARGS__) \
+		GEN_DEFINITION(num, name, ##__VA_ARGS__) \
 		return this; \
 	} \
 	void CONCAT(name,_free)(name *this) { \
@@ -247,7 +232,7 @@ static inline void called(void *data, char *function, size_t size, char *buffer)
 
 /* DOT_C */
 
-static inline void to_buffer(char *buffer, int n, ...)
+void to_buffer(char *buffer, int n, ...)
 {
 	size_t len = strlen(buffer);
 
@@ -307,7 +292,7 @@ static inline void parse(char **buf, void *ptr, size_t size)
 	(*buf) += size;
 }
 
-static inline void RFI_called(void *data, char *buffer)
+void RFI_called(void *data, char *buffer)
 {
 	char function[256];
 	size_t size = 0;
