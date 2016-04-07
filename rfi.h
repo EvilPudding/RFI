@@ -2,6 +2,7 @@
 #define RFI_H
 
 #include<stdlib.h>
+#include<alloca.h>
 #include<string.h>
 #include<stdarg.h>
 
