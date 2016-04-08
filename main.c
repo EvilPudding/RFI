@@ -19,25 +19,46 @@ void touch(void *data)
 	printf("Touched!\n");
 }
 
-HOST(
+HOST_HEADER(Host);
+HOST(Host,
 	SHARED_FUNC(printMessage, char*, char*),
 	SHARED_FUNC(printRange, int, int, int),
 	SHARED_FUNC(touch)
 );
 
+void server_received(void *data, char *buffer, size_t size)
+{
+	Host_called(NULL, buffer, size);
+}
+
 /* CLIENT SIDE */
 
 void send_to_server(void *data, char *buffer, size_t size)
 {
-	RFI_called(NULL, buffer, size); /* Loopback */
+	server_received(NULL, buffer, size);
 }
 
+#if 0
+REMOTE_HEADER(
+	Remote,
+	REMOTE_FUNC(printMessage, char*, char*),
+	REMOTE_FUNC(printRange, int, int, int),
+	REMOTE_FUNC(touch)
+);
+REMOTE_OBJECT(
+	Remote,
+	REMOTE_FUNC(printMessage, char*, char*),
+	REMOTE_FUNC(printRange, int, int, int),
+	REMOTE_FUNC(touch)
+);
+#else
 REMOTE(
 	Remote,
 	REMOTE_FUNC(printMessage, char*, char*),
 	REMOTE_FUNC(printRange, int, int, int),
 	REMOTE_FUNC(touch)
 );
+#endif
 
 int main(int argc, char **argv)
 {

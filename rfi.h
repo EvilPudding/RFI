@@ -6,8 +6,6 @@
 #include<string.h>
 #include<stdarg.h>
 
-#define CALL_REMOTE(func) REMOTE_##func
-
 #define CONCAT(a,b) a##b
 #define CONCAT2(a,b) CONCAT(a,b)
 
@@ -200,16 +198,20 @@ void to_buffer(char *, int, ...);
 void RFI_called(void *, char *, size_t);
 static inline void called(void *, char *, char*);
 
-#define _HOST(num, ...) \
+#define _HOST(name, num, ...) \
 	EXPAND(CALL(CONCAT(PREFIX_EACH,num), DEF_, ##__VA_ARGS__)) \
-	FUNC funcs[] = { \
+	const FUNC funcs[] = { \
 		EXPAND(CALL(CONCAT(PREFIX_EACH_COMMA,num), PTR_, ##__VA_ARGS__)) {"",NULL} \
 	}
 
-#define _REMOTE(name, num, ...) \
+#define _REMOTE_HEADER(name, num, ...) \
 	typedef struct { REMOTE_COMMON; \
 		EXPAND(CALL(CONCAT(PREFIX_EACH,num), PTR_, ##__VA_ARGS__)) \
 	} name; \
+	name *CONCAT(name,_new)(void(*)(void*,char*,size_t), void*); \
+	void CONCAT(name,_free)(name*);
+
+#define _REMOTE_OBJECT(name, num, ...) \
 	name *CONCAT(name,_new)(void(*send_function)(void*,char*,size_t), void *send_data) \
 	{ \
 		name *this = (name*)malloc(sizeof(name)); \
@@ -223,16 +225,28 @@ static inline void called(void *, char *, char*);
 		free(this); \
 	}
 
+
+#define _REMOTE(name, num, ...) \
+	_REMOTE_HEADER(name, num, ##__VA_ARGS__) \
+	_REMOTE_OBJECT(name, num, ##__VA_ARGS__)
+
 #define REMOTE(name, ...)	_REMOTE(name, ARGNUM(__VA_ARGS__), ##__VA_ARGS__)
-#define HOST(...)			_HOST(ARGNUM(__VA_ARGS__), ##__VA_ARGS__); \
-static inline void called(void *data, char *function, char *buffer) \
+#define REMOTE_HEADER(name, ...)	_REMOTE_HEADER(name, ARGNUM(__VA_ARGS__), ##__VA_ARGS__)
+#define REMOTE_OBJECT(name, ...)	_REMOTE_OBJECT(name, ARGNUM(__VA_ARGS__), ##__VA_ARGS__)
+
+#define HOST_HEADER(hname) void CONCAT(hname,_called)(void*, char*, size_t);
+#define HOST(hname, ...) \
+void CONCAT(hname,_called)(void *data, char *function, size_t size) \
 { \
+	_HOST(hname, ARGNUM(__VA_ARGS__), ##__VA_ARGS__); \
 	int i; \
+	char *args = strchr(function, '#') + 1; \
+	args[-1] = '\0'; \
 	for(i = 0; funcs[i].name[0] != '\0'; i++) \
 	{ \
 		if(!strcmp(function, funcs[i].name)) \
 		{ \
-			funcs[i].func(data, buffer); \
+			funcs[i].func(data, args); \
 			return; \
 		} \
 	} \
@@ -303,13 +317,6 @@ static inline void parse(char **buf, void *ptr, size_t size)
 		memcpy(ptr, (*buf), size);
 	}
 	(*buf) += size;
-}
-
-void RFI_called(void *data, char *buffer, size_t size)
-{
-	char *args = strchr(buffer, '#');
-	args[0] = '\0';
-	called(data, buffer, args + 1);
 }
 
 /* !DOT_C */
