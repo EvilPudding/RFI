@@ -37,6 +37,7 @@
 #define PREFIX_EACH_COMMA6(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA5(pre, __VA_ARGS__)
 #define PREFIX_EACH_COMMA7(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA6(pre, __VA_ARGS__)
 #define PREFIX_EACH_COMMA8(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA7(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA9(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA8(pre, __VA_ARGS__)
 
 #define PREFIX_EACH0()
 #define PREFIX_EACH1(pre, var) CONCAT(pre,var);
@@ -47,6 +48,7 @@
 #define PREFIX_EACH6(pre, var, ...) CONCAT(pre,var); PREFIX_EACH5(pre, __VA_ARGS__)
 #define PREFIX_EACH7(pre, var, ...) CONCAT(pre,var); PREFIX_EACH6(pre, __VA_ARGS__)
 #define PREFIX_EACH8(pre, var, ...) CONCAT(pre,var); PREFIX_EACH7(pre, __VA_ARGS__)
+#define PREFIX_EACH9(pre, var, ...) CONCAT(pre,var); PREFIX_EACH8(pre, __VA_ARGS__)
 
 #define PTRS0()
 #define PTRS1(var) PTR(var);
@@ -57,6 +59,7 @@
 #define PTRS6(var, ...) PTR(var); PTRS5(__VA_ARGS__)
 #define PTRS7(var, ...) PTR(var); PTRS6(__VA_ARGS__)
 #define PTRS8(var, ...) PTR(var); PTRS7(__VA_ARGS__)
+#define PTRS9(var, ...) PTR(var); PTRS8(__VA_ARGS__)
 
 #define DEFS0()
 #define DEFS1(var) DEF(var);
@@ -67,6 +70,7 @@
 #define DEFS6(var, ...) DEF(var); DEFS5(__VA_ARGS__)
 #define DEFS7(var, ...) DEF(var); DEFS6(__VA_ARGS__)
 #define DEFS8(var, ...) DEF(var); DEFS7(__VA_ARGS__)
+#define DEFS9(var, ...) DEF(var); DEFS8(__VA_ARGS__)
 
 #define EXPAND_DEF_ARG0() ...
 #define EXPAND_DEF_ARG1(type) type a
@@ -77,6 +81,7 @@
 #define EXPAND_DEF_ARG6(type, ...) type f, EXPAND_DEF_ARG5(__VA_ARGS__)
 #define EXPAND_DEF_ARG7(type, ...) type g, EXPAND_DEF_ARG6(__VA_ARGS__)
 #define EXPAND_DEF_ARG8(type, ...) type h, EXPAND_DEF_ARG7(__VA_ARGS__)
+#define EXPAND_DEF_ARG9(type, ...) type h, EXPAND_DEF_ARG8(__VA_ARGS__)
 
 #define istype(a,b) __builtin_types_compatible_p(a,b)
 #define is(c,a,b) __builtin_choose_expr(c,a,b)
@@ -91,6 +96,7 @@
 #define EXPAND_CALL_ARG6(type, ...) , &f, SSIZE(type) EXPAND_CALL_ARG5(__VA_ARGS__)
 #define EXPAND_CALL_ARG7(type, ...) , &g, SSIZE(type) EXPAND_CALL_ARG6(__VA_ARGS__)
 #define EXPAND_CALL_ARG8(type, ...) , &h, SSIZE(type) EXPAND_CALL_ARG7(__VA_ARGS__)
+#define EXPAND_CALL_ARG9(type, ...) , &h, SSIZE(type) EXPAND_CALL_ARG8(__VA_ARGS__)
 
 #define EXPAND_CALL_ARG_HOST0()
 #define EXPAND_CALL_ARG_HOST1(type) , a
@@ -101,6 +107,7 @@
 #define EXPAND_CALL_ARG_HOST6(type, ...) , f EXPAND_CALL_ARG_HOST5(__VA_ARGS__)
 #define EXPAND_CALL_ARG_HOST7(type, ...) , g EXPAND_CALL_ARG_HOST6(__VA_ARGS__)
 #define EXPAND_CALL_ARG_HOST8(type, ...) , h EXPAND_CALL_ARG_HOST7(__VA_ARGS__)
+#define EXPAND_CALL_ARG_HOST9(type, ...) , h EXPAND_CALL_ARG_HOST8(__VA_ARGS__)
 
 #define EXPAND_DEF_ARG_HOST0()
 #define EXPAND_DEF_ARG_HOST1(type) type a;parse(&buf, &a, SSIZE(type));
@@ -111,6 +118,7 @@
 #define EXPAND_DEF_ARG_HOST6(type, ...) type f;parse(&buf, &f, SSIZE(type)); EXPAND_DEF_ARG_HOST5(__VA_ARGS__)
 #define EXPAND_DEF_ARG_HOST7(type, ...) type g;parse(&buf, &g, SSIZE(type)); EXPAND_DEF_ARG_HOST6(__VA_ARGS__)
 #define EXPAND_DEF_ARG_HOST8(type, ...) type h;parse(&buf, &h, SSIZE(type)); EXPAND_DEF_ARG_HOST7(__VA_ARGS__)
+#define EXPAND_DEF_ARG_HOST9(type, ...) type h;parse(&buf, &h, SSIZE(type)); EXPAND_DEF_ARG_HOST8(__VA_ARGS__)
 
 #define DEFIT(var) DEF_##var
 #define EXPAND_DEF0(name, ...)
