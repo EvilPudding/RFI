@@ -275,6 +275,7 @@
 
 #define  REMOTE_COMMON \
 	void(*send_function)(void*, char*,size_t); \
+	void *extra_data; \
 	void *send_data
 
 typedef struct
