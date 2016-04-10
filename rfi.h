@@ -164,6 +164,7 @@
 		to_buffer(buffer, num * 2 fc(__VA_ARGS__) ); \
 		serv->send_function(serv->send_data, buffer_head, total_size); \
 	};
+
 #define _DEF_REM_FUNC(name, num, ...) \
 	__DEF_REM_FUNC(name, num, EXPAND_DEF_ARG##num, EXPAND_CALL_ARG##num, ##__VA_ARGS__)
 #define DEF_REM_FUNC(name, num, ...) _DEF_REM_FUNC(name, num, ##__VA_ARGS__) \
@@ -215,8 +216,8 @@ typedef struct
 	REMOTE_COMMON;
 } RFI_Server;
 
-void to_buffer(char *, int, ...);
-size_t get_size(int, ...);
+static inline void to_buffer(char *, int, ...);
+static inline size_t get_size(int, ...);
 
 #define _HOST(name, num, ...) \
 	EXPAND(CALL(CONCAT(PREFIX_EACH,num), DEF_, ##__VA_ARGS__)) \
@@ -275,7 +276,7 @@ void CONCAT(hname,_called)(void *data, char *function, size_t size) \
 }
 
 /* DOT_C */
-size_t write_to_buffer(char *buffer, void *ptr, size_t size)
+static inline size_t write_to_buffer(char *buffer, void *ptr, size_t size)
 {
 	if(size == 0) /* IS STRING */
 	{
@@ -290,7 +291,7 @@ size_t write_to_buffer(char *buffer, void *ptr, size_t size)
 	return size;
 }
 
-size_t get_size(int n, ...)
+static inline size_t get_size(int n, ...)
 {
 	va_list va;
 	va_start(va, n);
@@ -309,7 +310,7 @@ size_t get_size(int n, ...)
 	return total_size;
 }
 
-void to_buffer(char *buffer, int n, ...)
+static inline void to_buffer(char *buffer, int n, ...)
 {
 	va_list va;
 	va_start(va, n);
