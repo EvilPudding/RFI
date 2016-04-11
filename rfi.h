@@ -140,41 +140,41 @@
 #define EXPAND_CALL_ARG15(type, ...) , &o, SSIZE(type) EXPAND_CALL_ARG14(__VA_ARGS__)
 #define EXPAND_CALL_ARG16(type, ...) , &p, SSIZE(type) EXPAND_CALL_ARG15(__VA_ARGS__)
 
-#define EXPAND_CALL_ARG_HOST0()
-#define EXPAND_CALL_ARG_HOST1(type) , a
-#define EXPAND_CALL_ARG_HOST2(type, ...) , b EXPAND_CALL_ARG_HOST1(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST3(type, ...) , c EXPAND_CALL_ARG_HOST2(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST4(type, ...) , d EXPAND_CALL_ARG_HOST3(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST5(type, ...) , e EXPAND_CALL_ARG_HOST4(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST6(type, ...) , f EXPAND_CALL_ARG_HOST5(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST7(type, ...) , g EXPAND_CALL_ARG_HOST6(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST8(type, ...) , h EXPAND_CALL_ARG_HOST7(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST9(type, ...) , i EXPAND_CALL_ARG_HOST8(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST10(type, ...) , j EXPAND_CALL_ARG_HOST9(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST11(type, ...) , k EXPAND_CALL_ARG_HOST10(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST12(type, ...) , l EXPAND_CALL_ARG_HOST11(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST13(type, ...) , m EXPAND_CALL_ARG_HOST12(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST14(type, ...) , n EXPAND_CALL_ARG_HOST13(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST15(type, ...) , o EXPAND_CALL_ARG_HOST14(__VA_ARGS__)
-#define EXPAND_CALL_ARG_HOST16(type, ...) , p EXPAND_CALL_ARG_HOST15(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL0()
+#define EXPAND_CALL_ARG_LOCAL1(type) , a
+#define EXPAND_CALL_ARG_LOCAL2(type, ...) , b EXPAND_CALL_ARG_LOCAL1(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL3(type, ...) , c EXPAND_CALL_ARG_LOCAL2(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL4(type, ...) , d EXPAND_CALL_ARG_LOCAL3(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL5(type, ...) , e EXPAND_CALL_ARG_LOCAL4(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL6(type, ...) , f EXPAND_CALL_ARG_LOCAL5(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL7(type, ...) , g EXPAND_CALL_ARG_LOCAL6(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL8(type, ...) , h EXPAND_CALL_ARG_LOCAL7(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL9(type, ...) , i EXPAND_CALL_ARG_LOCAL8(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL10(type, ...) , j EXPAND_CALL_ARG_LOCAL9(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL11(type, ...) , k EXPAND_CALL_ARG_LOCAL10(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL12(type, ...) , l EXPAND_CALL_ARG_LOCAL11(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL13(type, ...) , m EXPAND_CALL_ARG_LOCAL12(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL14(type, ...) , n EXPAND_CALL_ARG_LOCAL13(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL15(type, ...) , o EXPAND_CALL_ARG_LOCAL14(__VA_ARGS__)
+#define EXPAND_CALL_ARG_LOCAL16(type, ...) , p EXPAND_CALL_ARG_LOCAL15(__VA_ARGS__)
 
-#define EXPAND_DEF_ARG_HOST0()
-#define EXPAND_DEF_ARG_HOST1(type) type a;parse(&buf, &a, SSIZE(type));
-#define EXPAND_DEF_ARG_HOST2(type, ...) type b;parse(&buf, &b, SSIZE(type)); EXPAND_DEF_ARG_HOST1(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST3(type, ...) type c;parse(&buf, &c, SSIZE(type)); EXPAND_DEF_ARG_HOST2(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST4(type, ...) type d;parse(&buf, &d, SSIZE(type)); EXPAND_DEF_ARG_HOST3(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST5(type, ...) type e;parse(&buf, &e, SSIZE(type)); EXPAND_DEF_ARG_HOST4(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST6(type, ...) type f;parse(&buf, &f, SSIZE(type)); EXPAND_DEF_ARG_HOST5(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST7(type, ...) type g;parse(&buf, &g, SSIZE(type)); EXPAND_DEF_ARG_HOST6(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST8(type, ...) type h;parse(&buf, &h, SSIZE(type)); EXPAND_DEF_ARG_HOST7(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST9(type, ...) type i;parse(&buf, &i, SSIZE(type)); EXPAND_DEF_ARG_HOST8(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST10(type, ...) type j;parse(&buf, &j, SSIZE(type)); EXPAND_DEF_ARG_HOST9(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST11(type, ...) type k;parse(&buf, &k, SSIZE(type)); EXPAND_DEF_ARG_HOST10(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST12(type, ...) type l;parse(&buf, &l, SSIZE(type)); EXPAND_DEF_ARG_HOST11(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST13(type, ...) type m;parse(&buf, &m, SSIZE(type)); EXPAND_DEF_ARG_HOST12(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST14(type, ...) type n;parse(&buf, &n, SSIZE(type)); EXPAND_DEF_ARG_HOST13(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST15(type, ...) type o;parse(&buf, &o, SSIZE(type)); EXPAND_DEF_ARG_HOST14(__VA_ARGS__)
-#define EXPAND_DEF_ARG_HOST16(type, ...) type p;parse(&buf, &p, SSIZE(type)); EXPAND_DEF_ARG_HOST15(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL0()
+#define EXPAND_DEF_ARG_LOCAL1(type) type a;parse(&buf, &a, SSIZE(type));
+#define EXPAND_DEF_ARG_LOCAL2(type, ...) type b;parse(&buf, &b, SSIZE(type)); EXPAND_DEF_ARG_LOCAL1(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL3(type, ...) type c;parse(&buf, &c, SSIZE(type)); EXPAND_DEF_ARG_LOCAL2(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL4(type, ...) type d;parse(&buf, &d, SSIZE(type)); EXPAND_DEF_ARG_LOCAL3(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL5(type, ...) type e;parse(&buf, &e, SSIZE(type)); EXPAND_DEF_ARG_LOCAL4(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL6(type, ...) type f;parse(&buf, &f, SSIZE(type)); EXPAND_DEF_ARG_LOCAL5(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL7(type, ...) type g;parse(&buf, &g, SSIZE(type)); EXPAND_DEF_ARG_LOCAL6(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL8(type, ...) type h;parse(&buf, &h, SSIZE(type)); EXPAND_DEF_ARG_LOCAL7(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL9(type, ...) type i;parse(&buf, &i, SSIZE(type)); EXPAND_DEF_ARG_LOCAL8(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL10(type, ...) type j;parse(&buf, &j, SSIZE(type)); EXPAND_DEF_ARG_LOCAL9(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL11(type, ...) type k;parse(&buf, &k, SSIZE(type)); EXPAND_DEF_ARG_LOCAL10(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL12(type, ...) type l;parse(&buf, &l, SSIZE(type)); EXPAND_DEF_ARG_LOCAL11(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL13(type, ...) type m;parse(&buf, &m, SSIZE(type)); EXPAND_DEF_ARG_LOCAL12(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL14(type, ...) type n;parse(&buf, &n, SSIZE(type)); EXPAND_DEF_ARG_LOCAL13(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL15(type, ...) type o;parse(&buf, &o, SSIZE(type)); EXPAND_DEF_ARG_LOCAL14(__VA_ARGS__)
+#define EXPAND_DEF_ARG_LOCAL16(type, ...) type p;parse(&buf, &p, SSIZE(type)); EXPAND_DEF_ARG_LOCAL15(__VA_ARGS__)
 
 #define DEFIT(var) DEF_##var
 #define EXPAND_DEF0(name, ...)
@@ -258,7 +258,7 @@
 	}
 
 #define _DEF_SHR_FUNC(name, num, ...) \
-	__DEF_SHR_FUNC(name, num, EXPAND_DEF_ARG_HOST##num, EXPAND_CALL_ARG_HOST##num, ##__VA_ARGS__)
+	__DEF_SHR_FUNC(name, num, EXPAND_DEF_ARG_LOCAL##num, EXPAND_CALL_ARG_LOCAL##num, ##__VA_ARGS__)
 #define DEF_SHR_FUNC(name, num, ...) \
 	_DEF_SHR_FUNC(name, num, ##__VA_ARGS__)
 
@@ -291,7 +291,7 @@ typedef struct
 static inline void to_buffer(char *, int, ...);
 static inline size_t get_size(int, ...);
 
-#define _HOST(name, num, ...) \
+#define _LOCAL(name, num, ...) \
 	EXPAND(CALL(CONCAT(PREFIX_EACH,num), DEF_, ##__VA_ARGS__)) \
 	const FUNC const funcs[] = { \
 		EXPAND(CALL(CONCAT(PREFIX_EACH_COMMA,num), PTR_, ##__VA_ARGS__)) {"",NULL} \
@@ -328,11 +328,11 @@ static inline size_t get_size(int, ...);
 #define REMOTE_HEADER(name, ...)	_REMOTE_HEADER(name, ARGNUM(__VA_ARGS__), ##__VA_ARGS__)
 #define REMOTE_OBJECT(name, ...)	_REMOTE_OBJECT(name, ARGNUM(__VA_ARGS__), ##__VA_ARGS__)
 
-#define HOST_HEADER(hname) void CONCAT(hname,_called)(void*, char*, size_t);
-#define HOST(hname, ...) \
+#define LOCAL_HEADER(hname) void CONCAT(hname,_called)(void*, char*, size_t);
+#define LOCAL(hname, ...) \
 void CONCAT(hname,_called)(void *data, char *function, size_t size) \
 { \
-	_HOST(hname, ARGNUM(__VA_ARGS__), ##__VA_ARGS__); \
+	_LOCAL(hname, ARGNUM(__VA_ARGS__), ##__VA_ARGS__); \
 	char *args = strchr(function, '#') + 1; \
 	args[-1] = '\0'; \
 	const FUNC * f = funcs; \

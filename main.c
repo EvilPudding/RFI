@@ -19,8 +19,8 @@ void touch(void *data)
 	printf("Touched!\n");
 }
 
-HOST_HEADER(Host);
-HOST(Host,
+/* LOCAL_HEADER(Local); */
+LOCAL(Local,
 	SHARED_FUNC(printMessage, char*, char*),
 	SHARED_FUNC(printRange, int, int, int),
 	SHARED_FUNC(touch)
@@ -28,7 +28,7 @@ HOST(Host,
 
 void server_received(void *data, char *buffer, size_t size)
 {
-	Host_called(NULL, buffer, size);
+	Local_called(NULL, buffer, size);
 }
 
 /* CLIENT SIDE */
