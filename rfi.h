@@ -228,7 +228,7 @@
 
 	#define call_void2(type)
 	#define call_non_void2(type) type ret; parse(&return_buffer, &ret, sizeof(ret)); \
-		free(return_buffer_head); \
+		free(return_vec); \
 		return ret;
 
 	#define _ISEMPTY2(...) __ISEMPTY(0, ##__VA_ARGS__,call_non_void2,call_void2)
@@ -247,9 +247,9 @@
 		char *buffer = buffer_head; \
 		memcpy(buffer, f_name, sizeof(f_name)); buffer += sizeof(f_name)-1; \
 		to_buffer(buffer, num * 2 fc(__VA_ARGS__) ); \
-		char *return_buffer_head = \
+		CHAR_VEC *return_vec = \
 			serv->request_function(serv->send_data, buffer_head, total_size); \
-		char *return_buffer = return_buffer_head; \
+		char *return_buffer = return_vec->bytes; \
 		IF_NOT_VOID_PARSE(type) \
 	}
 
@@ -268,11 +268,11 @@
 #define GEN_DEFINITION(num, name, ...) _GEN_DEFINITION(EXPAND_DEF##num, name, ##__VA_ARGS__)
 
 	#define call_void(type, value) \
-		ptr = malloc(sizeof(SHARED_RETURN)); \
+		ptr = malloc(sizeof(CHAR_VEC)); \
 		ptr->size = 0
 
 	#define call_non_void(type, value) \
-		ptr = malloc(sizeof(SHARED_RETURN) + sizeof(type)); \
+		ptr = malloc(sizeof(CHAR_VEC) + sizeof(type)); \
 		ptr->size = sizeof(type); \
 		*(type*)ptr->bytes = value
 
@@ -285,10 +285,10 @@
 	#define create_and_assign(t,v) _create_and_assign(t,v,check_##t())
 
 #define __DEF_SHR_FUNC(type, name, num, fd, fc, ...) \
-	SHARED_RETURN *SHARED_##name(void *client, char *buf) \
+	CHAR_VEC *SHARED_##name(void *client, char *buf) \
 	{ \
 		fd(__VA_ARGS__) /* parse here */ \
-		SHARED_RETURN *ptr; \
+		CHAR_VEC *ptr; \
 		create_and_assign(type,name(client fc(__VA_ARGS__))); \
 		name(client fc(__VA_ARGS__)); \
 		return ptr; \
@@ -311,7 +311,7 @@
 #define DEF_SHARED_FUNC(type, name, ...) DEF_SHR_FUNC(type, name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
 
 #define  REMOTE_COMMON \
-	char*(*request_function)(void*, char*,size_t); \
+	CHAR_VEC*(*request_function)(void*, char*,size_t); \
 	void *extra_data; \
 	void *send_data
 
@@ -319,12 +319,12 @@ typedef struct
 {
 	size_t size;
 	char bytes[];
-} SHARED_RETURN;
+} CHAR_VEC;
 
 typedef struct
 {
 	char name[100];
-	SHARED_RETURN*(*func)(void*, char*);
+	CHAR_VEC*(*func)(void*, char*);
 } FUNC;
 
 typedef struct
@@ -345,12 +345,12 @@ static inline size_t get_size(int, ...);
 	typedef struct { REMOTE_COMMON; \
 		EXPAND(CALL(CAT(PREFIX_EACH,num), PTR_, ##__VA_ARGS__)) \
 	} name; \
-	name *CAT(name,_new)(char*(*)(void*,char*,size_t), void*); \
+	name *CAT(name,_new)(CHAR_VEC*(*)(void*,char*,size_t), void*); \
 	void CAT(name,_free)(name*);
 
 #define _REMOTE_OBJECT(name, num, ...) \
 	GEN_DEFINITION(num, name, ##__VA_ARGS__) \
-	name *CAT(name,_new)(char*(*request_function)(void*,char*,size_t), void *send_data) \
+	name *CAT(name,_new)(CHAR_VEC*(*request_function)(void*,char*,size_t), void *send_data) \
 	{ \
 		name *this = (name*)malloc(sizeof(*this)); \
 		this->request_function = request_function; \
@@ -374,13 +374,13 @@ static inline size_t get_size(int, ...);
 
 #define LOCAL_HEADER(hname) void CAT(hname,_called)(void*, char*, size_t);
 #define LOCAL(hname, ...) \
-char *CAT(hname,_called)(void *data, char *function, size_t size) \
+CHAR_VEC *CAT(hname,_called)(void *data, char *function, size_t size) \
 { \
 	_LOCAL(hname, ARGNUM(__VA_ARGS__), ##__VA_ARGS__); \
 	char *args = strchr(function, '#') + 1; \
 	args[-1] = '\0'; \
 	const FUNC * f = funcs; \
-	SHARED_RETURN *ret = NULL; \
+	CHAR_VEC *ret = NULL; \
 	while(f->func) \
 	{ \
 		if(!strcmp(function, f->name)) \
@@ -392,14 +392,9 @@ char *CAT(hname,_called)(void *data, char *function, size_t size) \
 	} \
 	if(ret) \
 	{ \
-		char *str = malloc(ret->size + 1); \
-		memcpy(str, ret->bytes, ret->size); \
-		str[ret->size] = '\0'; \
-		free(ret); \
-		return str; \
-		/* send back */ \
+		return ret; \
 	} \
-	return ""; \
+	return NULL; \
 }
 
 /* DOT_C */
