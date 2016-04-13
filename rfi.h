@@ -6,8 +6,8 @@
 #include<string.h>
 #include<stdarg.h>
 
-#define CONCAT(a,b) a##b
-#define CONCAT2(a,b) CONCAT(a,b)
+#define CAT(a,b) a##b
+#define CAT2(a,b) CAT(a,b)
 
 #define ARGNUM(...) \
     _ARGNUM(_0, ##__VA_ARGS__, \
@@ -29,40 +29,40 @@
     _60,_61,_62, N, ...) N
 
 #define PREFIX_EACH_COMMA0()
-#define PREFIX_EACH_COMMA1(pre, var) CONCAT(pre,var),
-#define PREFIX_EACH_COMMA2(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA1(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA3(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA2(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA4(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA3(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA5(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA4(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA6(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA5(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA7(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA6(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA8(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA7(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA9(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA8(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA10(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA9(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA11(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA10(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA12(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA11(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA13(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA12(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA14(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA13(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA15(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA14(pre, __VA_ARGS__)
-#define PREFIX_EACH_COMMA16(pre, var, ...) CONCAT(pre,var), PREFIX_EACH_COMMA15(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA1(pre, var) CAT(pre,var),
+#define PREFIX_EACH_COMMA2(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA1(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA3(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA2(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA4(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA3(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA5(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA4(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA6(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA5(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA7(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA6(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA8(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA7(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA9(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA8(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA10(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA9(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA11(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA10(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA12(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA11(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA13(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA12(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA14(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA13(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA15(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA14(pre, __VA_ARGS__)
+#define PREFIX_EACH_COMMA16(pre, var, ...) CAT(pre,var), PREFIX_EACH_COMMA15(pre, __VA_ARGS__)
 
 #define PREFIX_EACH0()
-#define PREFIX_EACH1(pre, var) CONCAT(pre,var);
-#define PREFIX_EACH2(pre, var, ...) CONCAT(pre,var); PREFIX_EACH1(pre, __VA_ARGS__)
-#define PREFIX_EACH3(pre, var, ...) CONCAT(pre,var); PREFIX_EACH2(pre, __VA_ARGS__)
-#define PREFIX_EACH4(pre, var, ...) CONCAT(pre,var); PREFIX_EACH3(pre, __VA_ARGS__)
-#define PREFIX_EACH5(pre, var, ...) CONCAT(pre,var); PREFIX_EACH4(pre, __VA_ARGS__)
-#define PREFIX_EACH6(pre, var, ...) CONCAT(pre,var); PREFIX_EACH5(pre, __VA_ARGS__)
-#define PREFIX_EACH7(pre, var, ...) CONCAT(pre,var); PREFIX_EACH6(pre, __VA_ARGS__)
-#define PREFIX_EACH8(pre, var, ...) CONCAT(pre,var); PREFIX_EACH7(pre, __VA_ARGS__)
-#define PREFIX_EACH9(pre, var, ...) CONCAT(pre,var); PREFIX_EACH8(pre, __VA_ARGS__)
-#define PREFIX_EACH10(pre, var, ...) CONCAT(pre,var); PREFIX_EACH9(pre, __VA_ARGS__)
-#define PREFIX_EACH11(pre, var, ...) CONCAT(pre,var); PREFIX_EACH10(pre, __VA_ARGS__)
-#define PREFIX_EACH12(pre, var, ...) CONCAT(pre,var); PREFIX_EACH11(pre, __VA_ARGS__)
-#define PREFIX_EACH13(pre, var, ...) CONCAT(pre,var); PREFIX_EACH12(pre, __VA_ARGS__)
-#define PREFIX_EACH14(pre, var, ...) CONCAT(pre,var); PREFIX_EACH13(pre, __VA_ARGS__)
-#define PREFIX_EACH15(pre, var, ...) CONCAT(pre,var); PREFIX_EACH14(pre, __VA_ARGS__)
-#define PREFIX_EACH16(pre, var, ...) CONCAT(pre,var); PREFIX_EACH15(pre, __VA_ARGS__)
+#define PREFIX_EACH1(pre, var) CAT(pre,var);
+#define PREFIX_EACH2(pre, var, ...) CAT(pre,var); PREFIX_EACH1(pre, __VA_ARGS__)
+#define PREFIX_EACH3(pre, var, ...) CAT(pre,var); PREFIX_EACH2(pre, __VA_ARGS__)
+#define PREFIX_EACH4(pre, var, ...) CAT(pre,var); PREFIX_EACH3(pre, __VA_ARGS__)
+#define PREFIX_EACH5(pre, var, ...) CAT(pre,var); PREFIX_EACH4(pre, __VA_ARGS__)
+#define PREFIX_EACH6(pre, var, ...) CAT(pre,var); PREFIX_EACH5(pre, __VA_ARGS__)
+#define PREFIX_EACH7(pre, var, ...) CAT(pre,var); PREFIX_EACH6(pre, __VA_ARGS__)
+#define PREFIX_EACH8(pre, var, ...) CAT(pre,var); PREFIX_EACH7(pre, __VA_ARGS__)
+#define PREFIX_EACH9(pre, var, ...) CAT(pre,var); PREFIX_EACH8(pre, __VA_ARGS__)
+#define PREFIX_EACH10(pre, var, ...) CAT(pre,var); PREFIX_EACH9(pre, __VA_ARGS__)
+#define PREFIX_EACH11(pre, var, ...) CAT(pre,var); PREFIX_EACH10(pre, __VA_ARGS__)
+#define PREFIX_EACH12(pre, var, ...) CAT(pre,var); PREFIX_EACH11(pre, __VA_ARGS__)
+#define PREFIX_EACH13(pre, var, ...) CAT(pre,var); PREFIX_EACH12(pre, __VA_ARGS__)
+#define PREFIX_EACH14(pre, var, ...) CAT(pre,var); PREFIX_EACH13(pre, __VA_ARGS__)
+#define PREFIX_EACH15(pre, var, ...) CAT(pre,var); PREFIX_EACH14(pre, __VA_ARGS__)
+#define PREFIX_EACH16(pre, var, ...) CAT(pre,var); PREFIX_EACH15(pre, __VA_ARGS__)
 
 #define PTRS0()
 #define PTRS1(var) PTR(var);
@@ -177,54 +177,67 @@
 #define EXPAND_DEF_ARG_LOCAL16(type, ...) type p;parse(&buf, &p, SSIZE(type)); EXPAND_DEF_ARG_LOCAL15(__VA_ARGS__)
 
 #define DEFIT(var) DEF_##var
+#define TYPIT(var) TYP_##var
 #define EXPAND_DEF0(name, ...)
-#define EXPAND_DEF1(name, var)		void CONCAT2(name##_,DEFIT(var));
-#define EXPAND_DEF2(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF1(name, __VA_ARGS__)
-#define EXPAND_DEF3(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF2(name, __VA_ARGS__)
-#define EXPAND_DEF4(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF3(name, __VA_ARGS__)
-#define EXPAND_DEF5(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF4(name, __VA_ARGS__)
-#define EXPAND_DEF6(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF5(name, __VA_ARGS__)
-#define EXPAND_DEF7(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF6(name, __VA_ARGS__)
-#define EXPAND_DEF8(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF7(name, __VA_ARGS__)
-#define EXPAND_DEF9(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF8(name, __VA_ARGS__)
-#define EXPAND_DEF10(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF9(name, __VA_ARGS__)
-#define EXPAND_DEF11(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF10(name, __VA_ARGS__)
-#define EXPAND_DEF12(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF11(name, __VA_ARGS__)
-#define EXPAND_DEF13(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF12(name, __VA_ARGS__)
-#define EXPAND_DEF14(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF13(name, __VA_ARGS__)
-#define EXPAND_DEF15(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF14(name, __VA_ARGS__)
-#define EXPAND_DEF16(name, var, ...) void CONCAT2(name##_,DEFIT(var)); EXPAND_DEF15(name, __VA_ARGS__)
+#define EXPAND_DEF1(name, var)		TYPIT(var) CAT2(name##_,DEFIT(var));
+#define EXPAND_DEF2(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF1(name, __VA_ARGS__)
+#define EXPAND_DEF3(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF2(name, __VA_ARGS__)
+#define EXPAND_DEF4(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF3(name, __VA_ARGS__)
+#define EXPAND_DEF5(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF4(name, __VA_ARGS__)
+#define EXPAND_DEF6(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF5(name, __VA_ARGS__)
+#define EXPAND_DEF7(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF6(name, __VA_ARGS__)
+#define EXPAND_DEF8(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF7(name, __VA_ARGS__)
+#define EXPAND_DEF9(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF8(name, __VA_ARGS__)
+#define EXPAND_DEF10(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF9(name, __VA_ARGS__)
+#define EXPAND_DEF11(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF10(name, __VA_ARGS__)
+#define EXPAND_DEF12(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF11(name, __VA_ARGS__)
+#define EXPAND_DEF13(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF12(name, __VA_ARGS__)
+#define EXPAND_DEF14(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF13(name, __VA_ARGS__)
+#define EXPAND_DEF15(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF14(name, __VA_ARGS__)
+#define EXPAND_DEF16(name, var, ...) TYPIT(var) CAT2(name##_,DEFIT(var)); EXPAND_DEF15(name, __VA_ARGS__)
+/* TODO: replace EXPAND_DEF with just prefix each DEF_ */
 
 #define ASSIT(var) ASS_##var
 #define EXPAND_ASS0()
-#define EXPAND_ASS1(name, var) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var));
-#define EXPAND_ASS2(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS1(name, __VA_ARGS__)
-#define EXPAND_ASS3(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS2(name, __VA_ARGS__)
-#define EXPAND_ASS4(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS3(name, __VA_ARGS__)
-#define EXPAND_ASS5(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS4(name, __VA_ARGS__)
-#define EXPAND_ASS6(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS5(name, __VA_ARGS__)
-#define EXPAND_ASS7(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS6(name, __VA_ARGS__)
-#define EXPAND_ASS8(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS7(name, __VA_ARGS__)
-#define EXPAND_ASS9(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS8(name, __VA_ARGS__)
-#define EXPAND_ASS10(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS9(name, __VA_ARGS__)
-#define EXPAND_ASS11(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS10(name, __VA_ARGS__)
-#define EXPAND_ASS12(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS11(name, __VA_ARGS__)
-#define EXPAND_ASS13(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS12(name, __VA_ARGS__)
-#define EXPAND_ASS14(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS13(name, __VA_ARGS__)
-#define EXPAND_ASS15(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS14(name, __VA_ARGS__)
-#define EXPAND_ASS16(name, var, ...) this->ASSIT(var) = CONCAT2(name##_,ASSIT(var)); EXPAND_ASS15(name, __VA_ARGS__)
+#define EXPAND_ASS1(name, var) this->ASSIT(var) = CAT2(name##_,ASSIT(var));
+#define EXPAND_ASS2(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS1(name, __VA_ARGS__)
+#define EXPAND_ASS3(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS2(name, __VA_ARGS__)
+#define EXPAND_ASS4(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS3(name, __VA_ARGS__)
+#define EXPAND_ASS5(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS4(name, __VA_ARGS__)
+#define EXPAND_ASS6(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS5(name, __VA_ARGS__)
+#define EXPAND_ASS7(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS6(name, __VA_ARGS__)
+#define EXPAND_ASS8(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS7(name, __VA_ARGS__)
+#define EXPAND_ASS9(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS8(name, __VA_ARGS__)
+#define EXPAND_ASS10(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS9(name, __VA_ARGS__)
+#define EXPAND_ASS11(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS10(name, __VA_ARGS__)
+#define EXPAND_ASS12(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS11(name, __VA_ARGS__)
+#define EXPAND_ASS13(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS12(name, __VA_ARGS__)
+#define EXPAND_ASS14(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS13(name, __VA_ARGS__)
+#define EXPAND_ASS15(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS14(name, __VA_ARGS__)
+#define EXPAND_ASS16(name, var, ...) this->ASSIT(var) = CAT2(name##_,ASSIT(var)); EXPAND_ASS15(name, __VA_ARGS__)
 
 #define CALL(f, ...) f(__VA_ARGS__)
 #define CALL2(...) CALL(__VA_ARGS__)
 #define EXPAND(...) __VA_ARGS__
 
-#define __DEF_REM_PTRS(name, f, ...) \
-	void (*name)(void *, f(__VA_ARGS__))
-#define _DEF_REM_PTRS(name, num, ...) \
-	__DEF_REM_PTRS(name, EXPAND_DEF_ARG##num, ##__VA_ARGS__)
-#define DEF_REM_PTRS(name, num, ...) _DEF_REM_PTRS(name, num, ##__VA_ARGS__)
+#define __DEF_REM_PTRS(type, name, f, ...) \
+	type (*name)(void *, f(__VA_ARGS__))
+#define _DEF_REM_PTRS(type, name, num, ...) \
+	__DEF_REM_PTRS(type, name, EXPAND_DEF_ARG##num, ##__VA_ARGS__)
+#define DEF_REM_PTRS(type, name, num, ...) _DEF_REM_PTRS(type, name, num, ##__VA_ARGS__)
 
-#define __DEF_REM_FUNC(name, num, fd, fc, ...) \
+	#define call_void2(type)
+	#define call_non_void2(type) type ret; parse(&return_buffer, &ret, sizeof(ret)); \
+		free(return_buffer_head); \
+		return ret;
+
+	#define _ISEMPTY2(...) __ISEMPTY(0, ##__VA_ARGS__,call_non_void2,call_void2)
+	#define ISEMPTY2(...) _ISEMPTY2(__VA_ARGS__)
+
+	#define _IF_NOT_VOID_PARSE(t,c) ISEMPTY2(c)(t)
+	#define IF_NOT_VOID_PARSE(t) _IF_NOT_VOID_PARSE(t,check_##t())
+
+#define __DEF_REM_FUNC(type, name, num, fd, fc, ...) \
 	name(void *data, fd(__VA_ARGS__)) \
 	{ \
 		const char f_name[] = #name "#"; \
@@ -234,54 +247,84 @@
 		char *buffer = buffer_head; \
 		memcpy(buffer, f_name, sizeof(f_name)); buffer += sizeof(f_name)-1; \
 		to_buffer(buffer, num * 2 fc(__VA_ARGS__) ); \
-		serv->send_function(serv->send_data, buffer_head, total_size); \
-	};
+		char *return_buffer_head = \
+			serv->request_function(serv->send_data, buffer_head, total_size); \
+		char *return_buffer = return_buffer_head; \
+		IF_NOT_VOID_PARSE(type) \
+	}
 
-#define _DEF_REM_FUNC(name, num, ...) \
-	__DEF_REM_FUNC(name, num, EXPAND_DEF_ARG##num, EXPAND_CALL_ARG##num, ##__VA_ARGS__)
-#define DEF_REM_FUNC(name, num, ...) _DEF_REM_FUNC(name, num, ##__VA_ARGS__) \
+#define _DEF_REM_FUNC(type, name, num, ...) \
+	__DEF_REM_FUNC(type, name, num, EXPAND_DEF_ARG##num, EXPAND_CALL_ARG##num, ##__VA_ARGS__)
+#define DEF_REM_FUNC(type, name, num, ...) _DEF_REM_FUNC(type, name, num, ##__VA_ARGS__) \
 
-#define DEF_REMOTE_FUNC(name, ...) DEF_REM_FUNC(name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
-#define PTR_REMOTE_FUNC(name, ...) DEF_REM_PTRS(name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
-#define ASS_REMOTE_FUNC(name, ...) name
+#define TYP_REMOTE_FUNC(type, name, ...) type
+#define DEF_REMOTE_FUNC(type, name, ...) DEF_REM_FUNC(type, name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
+#define PTR_REMOTE_FUNC(type, name, ...) DEF_REM_PTRS(type, name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
+#define ASS_REMOTE_FUNC(type, name, ...) name
 
 #define _GEN_ASSIGNMENT(f, name, ...) f(name, ##__VA_ARGS__)
 #define _GEN_DEFINITION(f, name, ...) f(name, ##__VA_ARGS__)
 #define GEN_ASSIGNMENT(num, name, ...) _GEN_ASSIGNMENT(EXPAND_ASS##num, name, ##__VA_ARGS__)
 #define GEN_DEFINITION(num, name, ...) _GEN_DEFINITION(EXPAND_DEF##num, name, ##__VA_ARGS__)
 
-#define __DEF_SHR_FUNC(name, num, fd, fc, ...) \
-	void SHARED_##name(void *client, char *buf) \
+	#define call_void(type, value) \
+		ptr = malloc(sizeof(SHARED_RETURN)); \
+		ptr->size = 0
+
+	#define call_non_void(type, value) \
+		ptr = malloc(sizeof(SHARED_RETURN) + sizeof(type)); \
+		ptr->size = sizeof(type); \
+		*(type*)ptr->bytes = value
+
+	#define __ISEMPTY(_t, _0, N, ...) N
+	#define _ISEMPTY(...) __ISEMPTY(0, ##__VA_ARGS__,call_non_void,call_void)
+	#define ISEMPTY(...) _ISEMPTY(__VA_ARGS__)
+	#define check_void()
+
+	#define _create_and_assign(t,v,c) ISEMPTY(c)(t,v)
+	#define create_and_assign(t,v) _create_and_assign(t,v,check_##t())
+
+#define __DEF_SHR_FUNC(type, name, num, fd, fc, ...) \
+	SHARED_RETURN *SHARED_##name(void *client, char *buf) \
 	{ \
 		fd(__VA_ARGS__) /* parse here */ \
+		SHARED_RETURN *ptr; \
+		create_and_assign(type,name(client fc(__VA_ARGS__))); \
 		name(client fc(__VA_ARGS__)); \
+		return ptr; \
 	}
 
-#define _DEF_SHR_FUNC(name, num, ...) \
-	__DEF_SHR_FUNC(name, num, EXPAND_DEF_ARG_LOCAL##num, EXPAND_CALL_ARG_LOCAL##num, ##__VA_ARGS__)
-#define DEF_SHR_FUNC(name, num, ...) \
-	_DEF_SHR_FUNC(name, num, ##__VA_ARGS__)
+#define _DEF_SHR_FUNC(type, name, num, ...) \
+	__DEF_SHR_FUNC(type, name, num, EXPAND_DEF_ARG_LOCAL##num, EXPAND_CALL_ARG_LOCAL##num, ##__VA_ARGS__)
+#define DEF_SHR_FUNC(type, name, num, ...) \
+	_DEF_SHR_FUNC(type, name, num, ##__VA_ARGS__)
 
-#define __DEF_SHR_PTRS(name, num, ...) \
+#define __DEF_SHR_PTRS(type, name, num, ...) \
 	{#name, SHARED_##name}
 
-#define _DEF_SHR_PTRS(name, num, ...) \
-	__DEF_SHR_PTRS(name, num, ##__VA_ARGS__)
+#define _DEF_SHR_PTRS(type, name, num, ...) \
+	__DEF_SHR_PTRS(type, name, num, ##__VA_ARGS__)
 
-#define DEF_SHR_PTRS(name, num, ...) _DEF_SHR_PTRS(name, num, ##__VA_ARGS__)
+#define DEF_SHR_PTRS(type, name, num, ...) _DEF_SHR_PTRS(type, name, num, ##__VA_ARGS__)
 
-#define PTR_SHARED_FUNC(name, ...) DEF_SHR_PTRS(name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
-#define DEF_SHARED_FUNC(name, ...) DEF_SHR_FUNC(name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
+#define PTR_SHARED_FUNC(type, name, ...) DEF_SHR_PTRS(type, name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
+#define DEF_SHARED_FUNC(type, name, ...) DEF_SHR_FUNC(type, name, ARGNUM(__VA_ARGS__),##__VA_ARGS__)
 
 #define  REMOTE_COMMON \
-	void(*send_function)(void*, char*,size_t); \
+	char*(*request_function)(void*, char*,size_t); \
 	void *extra_data; \
 	void *send_data
 
 typedef struct
 {
+	size_t size;
+	char bytes[];
+} SHARED_RETURN;
+
+typedef struct
+{
 	char name[100];
-	void(*func)(void*, char*);
+	SHARED_RETURN*(*func)(void*, char*);
 } FUNC;
 
 typedef struct
@@ -293,29 +336,29 @@ static inline void to_buffer(char *, int, ...);
 static inline size_t get_size(int, ...);
 
 #define _LOCAL(name, num, ...) \
-	EXPAND(CALL(CONCAT(PREFIX_EACH,num), DEF_, ##__VA_ARGS__)) \
+	EXPAND(CALL(CAT(PREFIX_EACH,num), DEF_, ##__VA_ARGS__)) \
 	const FUNC const funcs[] = { \
-		EXPAND(CALL(CONCAT(PREFIX_EACH_COMMA,num), PTR_, ##__VA_ARGS__)) {"",NULL} \
+		EXPAND(CALL(CAT(PREFIX_EACH_COMMA,num), PTR_, ##__VA_ARGS__)) {"",NULL} \
 	}
 
 #define _REMOTE_HEADER(name, num, ...) \
 	typedef struct { REMOTE_COMMON; \
-		EXPAND(CALL(CONCAT(PREFIX_EACH,num), PTR_, ##__VA_ARGS__)) \
+		EXPAND(CALL(CAT(PREFIX_EACH,num), PTR_, ##__VA_ARGS__)) \
 	} name; \
-	name *CONCAT(name,_new)(void(*)(void*,char*,size_t), void*); \
-	void CONCAT(name,_free)(name*);
+	name *CAT(name,_new)(char*(*)(void*,char*,size_t), void*); \
+	void CAT(name,_free)(name*);
 
 #define _REMOTE_OBJECT(name, num, ...) \
 	GEN_DEFINITION(num, name, ##__VA_ARGS__) \
-	name *CONCAT(name,_new)(void(*send_function)(void*,char*,size_t), void *send_data) \
+	name *CAT(name,_new)(char*(*request_function)(void*,char*,size_t), void *send_data) \
 	{ \
 		name *this = (name*)malloc(sizeof(*this)); \
-		this->send_function = send_function; \
+		this->request_function = request_function; \
 		this->send_data = send_data; \
 		GEN_ASSIGNMENT(num, name, ##__VA_ARGS__) \
 		return this; \
 	} \
-	void CONCAT(name,_free)(name *this) \
+	void CAT(name,_free)(name *this) \
 	{ \
 		free(this); \
 	}
@@ -329,23 +372,34 @@ static inline size_t get_size(int, ...);
 #define REMOTE_HEADER(name, ...)	_REMOTE_HEADER(name, ARGNUM(__VA_ARGS__), ##__VA_ARGS__)
 #define REMOTE_OBJECT(name, ...)	_REMOTE_OBJECT(name, ARGNUM(__VA_ARGS__), ##__VA_ARGS__)
 
-#define LOCAL_HEADER(hname) void CONCAT(hname,_called)(void*, char*, size_t);
+#define LOCAL_HEADER(hname) void CAT(hname,_called)(void*, char*, size_t);
 #define LOCAL(hname, ...) \
-void CONCAT(hname,_called)(void *data, char *function, size_t size) \
+char *CAT(hname,_called)(void *data, char *function, size_t size) \
 { \
 	_LOCAL(hname, ARGNUM(__VA_ARGS__), ##__VA_ARGS__); \
 	char *args = strchr(function, '#') + 1; \
 	args[-1] = '\0'; \
 	const FUNC * f = funcs; \
+	SHARED_RETURN *ret = NULL; \
 	while(f->func) \
 	{ \
 		if(!strcmp(function, f->name)) \
 		{ \
-			f->func(data, args); \
-			return; \
+			ret = f->func(data, args); \
+			break; \
 		} \
 		f++; \
 	} \
+	if(ret) \
+	{ \
+		char *str = malloc(ret->size + 1); \
+		memcpy(str, ret->bytes, ret->size); \
+		str[ret->size] = '\0'; \
+		free(ret); \
+		return str; \
+		/* send back */ \
+	} \
+	return ""; \
 }
 
 /* DOT_C */
