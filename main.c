@@ -32,16 +32,16 @@ LOCAL(Local,
 	SHARED_FUNC(int, getIncrement, int)
 );
 
-CHAR_VEC *server_received(void *data, char *buffer, size_t size)
+char *server_received(void *p, char *buffer, size_t size, size_t *result_size)
 {
-	return Local_called(NULL, buffer, size);
+	return Local_called(NULL, buffer, size, result_size);
 }
 
 /* CLIENT SIDE */
 
-CHAR_VEC *request_to_server(void *data, char *buffer, size_t size)
+char *request_to_server(void *p, char *buffer, size_t size, size_t *result_size)
 {
-	return server_received(NULL, buffer, size);
+	return server_received(NULL, buffer, size, result_size);
 }
 
 #if 0
